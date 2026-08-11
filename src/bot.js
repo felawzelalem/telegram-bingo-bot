@@ -2,11 +2,13 @@ require('dotenv').config();
 const { Telegraf, Markup } = require('telegraf');
 const axios = require('axios');
 const cron = require('node-cron');
+const http = require('http');
 
 // Configuration
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const API_URL = process.env.API_URL;
 const MINI_APP_URL = process.env.MINI_APP_URL;
+const PORT = process.env.PORT || 3000;
 
 if (!BOT_TOKEN) {
     console.error('BOT_TOKEN is required');
@@ -15,6 +17,26 @@ if (!BOT_TOKEN) {
 
 // Initialize bot
 const bot = new Telegraf(BOT_TOKEN);
+
+// Create a simple HTTP server for health checks (Render requirement)
+const server = http.createServer((req, res) => {
+    if (req.url === '/health' || req.url === '/') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+            status: 'ok',
+            bot: 'King Bingo Bot',
+            uptime: process.uptime(),
+            timestamp: new Date().toISOString()
+        }));
+    } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Not found' }));
+    }
+});
+
+server.listen(PORT, () => {
+    console.log(`✅ Health check server running on port ${PORT}`);
+});
 
 // Store user sessions
 const userSessions = new Map();
