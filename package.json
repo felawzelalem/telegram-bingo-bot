@@ -4,8 +4,8 @@
   "description": "Telegram bot for Bingo game system",
   "main": "src/simple-bot.js",
   "scripts": {
-    "start": "node src/simple-bot.js",
-    "dev": "nodemon src/simple-bot.js"
+    "start": "node simple-bot.js",
+    "dev": "nodemon simple-bot.js"
   },
   "keywords": ["telegram", "bot", "bingo", "game"],
   "author": "",
