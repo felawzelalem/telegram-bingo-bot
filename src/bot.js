@@ -50,7 +50,9 @@ async function apiCall(endpoint, method = 'GET', data = null, token = null) {
         const config = {
             method,
             url: `${API_URL}/${endpoint}`,
-            headers: {}
+            headers: {
+                'Content-Type': 'application/json'
+            }
         };
         
         if (token) {
@@ -61,11 +63,20 @@ async function apiCall(endpoint, method = 'GET', data = null, token = null) {
             config.data = data;
         }
         
+        console.log(`📞 API Call: ${method} ${API_URL}/${endpoint}`);
+        console.log('📦 Request data:', JSON.stringify(data));
+        
         const response = await axios(config);
+        console.log(`✅ API Response (${endpoint}):`, response.data);
         return response.data;
     } catch (error) {
-        console.error(`API Error (${endpoint}):`, error.response?.data || error.message);
-        return { success: false, message: error.response?.data?.message || 'API request failed' };
+        console.error(`❌ API Error (${endpoint}):`, {
+            message: error.message,
+            status: error.response?.status,
+            data: error.response?.data,
+            url: `${API_URL}/${endpoint}`
+        });
+        return { success: false, message: error.response?.data?.message || error.message || 'API request failed' };
     }
 }
 
