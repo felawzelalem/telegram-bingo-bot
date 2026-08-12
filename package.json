@@ -2,7 +2,7 @@
   "name": "telegram-bingo-bot",
   "version": "1.0.0",
   "description": "Telegram bot for Bingo game system",
-  "main": "src/bot.js",
+  "main": "bot.js",
   "scripts": {
   "start": "node bot.js",
   "dev": "nodemon bot.js"
